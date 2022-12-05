@@ -1,1 +1,0 @@
-The project is to help scan companies from the American S&P. After the ticker, we have the opportunity to see a chart that contains the period we set (the charts can be of the type that we set ourselves). In addition, the program helps you leverage the value of companies based on comparisons to other companies in the industry.
