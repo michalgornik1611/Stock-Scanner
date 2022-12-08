@@ -11,19 +11,22 @@ companies_SP = pd.read_csv(
 tickers_SP = companies_SP["Symbol"]
 
 class DefiningSector:
-    """Get info about sector of our stock"""
+
+    """Get info about sector of  stock"""
+
     def __init__(self, ticker):
         self.ticker = ticker
 
-    def arrangement_of_group(self):
-        if self.ticker.upper() in companies_SP.values:
-            sector = (companies_SP.loc[companies_SP['Symbol'] == self.ticker.upper()])['Sector'].iloc[0]
+    @staticmethod
+    def arrangement_of_group(ticker):
+        if ticker.upper() in companies_SP.values:
+            sector = (companies_SP.loc[companies_SP['Symbol'] == ticker.upper()])['Sector'].iloc[0]
             groups = companies_SP.groupby(by='Sector').get_group(sector)["Symbol"]
-            print(f"Sector of {self.ticker.upper()} is {sector}")
+            print(f"Sector of {ticker.upper()} is {sector}")
             return groups
 
         else:
-            print('There is not ticker in S&P.')
+            print('Ticker is not in our list.')
 
 class Analysis:
 
@@ -33,7 +36,7 @@ class Analysis:
         self.ticker = ticker
 
 
-    async def download_site(self, session, url):
+    async def download_site(session, url):
         async with session.get(url) as response:
             return await response.text()
 
@@ -42,7 +45,7 @@ class Analysis:
         async with aiohttp.ClientSession() as session:
             tasks = []
             for url in sites:
-                task = asyncio.ensure_future(download_site(session, url))
+                task = asyncio.ensure_future(Analysis.download_site(session=session, url=url))
                 tasks.append(task)
             return await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -77,7 +80,7 @@ class Analysis:
 
         for module in modules:
             try:
-                site = f'https://query1.finance.yahoo.com/v11/finance/quoteSummary/{tick}?modules={module}'
+                site = f'https://query1.finance.yahoo.com/v11/finance/quoteSummary/{ticker}?modules={module}'
                 json_url = urlopen(site)
                 data = json.loads(json_url.read())
                 return (data['quoteSummary']['result'][0][module][i]['raw'])
@@ -111,14 +114,14 @@ class Analysis:
             our_rating = 0
             for ratio in kind_of_ratio:
 
-                our_stock = processing_stock(ticker, ratio)
+                our_stock = Analysis.processing_stock(ticker, ratio)
                 x = []
                 for result in results:
                     try:
-                        x.append(float(post_process_result(json.loads(result), ratio)))
+                        x.append(float(Analysis.post_process_result(json.loads(result), ratio)))
                     except:
                         pass
-                print(f"Value of {ratio} of {ticker.upper()} is {our_stock:.2f} (median for companies from sector: {statistics.median(x):.2f})")
+                print(f"Value of {ratio} of your stock is {our_stock:.2f} (median for companies from sector: {statistics.median(x):.2f})")
                 decreasing_values_better = ["debtToEquity",
                          "enterpriseToEbitda",
                          "trailingEps",
@@ -139,15 +142,16 @@ class Analysis:
             elif our_rating < 0:
                 print (f"Based on above indicators, stock is overvalued, our rating equals: {our_rating}\n")
             else:
-                print ("Indicators do not show difference between stock and sector.\n")
+                print ("Indicators do not show difference between stock and other companies from sector.\n")
 
 
 def main (ticker):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    companies_from_sector = DefiningSector.arrangement_of_group
+    companies_from_sector = DefiningSector.arrangement_of_group(ticker)
     urls = Analysis.generate_urls(companies_from_sector)
-    results = asyncio.run(download_all_sites(urls))
-    research(self.ticker.upper(), results)
+    results = asyncio.run(Analysis.download_all_sites(urls))
+    Analysis.research(ticker, results)
 
-main ('aapl')
+if __name__ == "__main__":
+    main(input("Type ticker of stock:"))
 
