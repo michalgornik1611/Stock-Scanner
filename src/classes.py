@@ -37,16 +37,16 @@ class Chart(Stock):
 
 
 
+def run_info (ticker):
+    type = str(input ("What type of chart do you want to see? (candle, line, renko, pnf)?"))
+    period = str(input ("What period? (d, mo, y, ytd, max)"))
+    interval = str(input ("What interval? (1h, 1d, 5d, 1wk, 1mo)"))
+    mav = int(input ("Which moving average do you want to see? Write number."))
 
-ticker = str(input ("Type ticker of S&P stock, that you want to scan."))
-type = str(input ("What type of chart do you want to see? (candle, line, renko, pnf)?"))
-period = str(input ("What period? (d, mo, y, ytd, max)"))
-interval = str(input ("What interval? (1h, 1d, 5d, 1wk, 1mo)"))
-mav = int(input ("Which moving average do you want to see? Write number."))
+    user_stock = Chart (ticker, type, period, interval, mav)
+    user_stock.show_main_information()
+    user_stock.analyst_informations()
+    user_stock.show_chart()
 
-user_stock = Chart (ticker, type, period, interval, mav)
-user_stock.show_main_information()
-user_stock.analyst_informations()
-user_stock.show_chart()
 
 

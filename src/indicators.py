@@ -145,13 +145,11 @@ class Analysis:
                 print ("Indicators do not show difference between stock and other companies from sector.\n")
 
 
-def main (ticker):
+def run (ticker):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     companies_from_sector = DefiningSector.arrangement_of_group(ticker)
     urls = Analysis.generate_urls(companies_from_sector)
     results = asyncio.run(Analysis.download_all_sites(urls))
     Analysis.research(ticker, results)
 
-if __name__ == "__main__":
-    main(input("Type ticker of stock:"))
 
