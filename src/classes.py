@@ -28,8 +28,8 @@ class Chart(Stock):
 
     def show_chart(self):
             frame = pd.DataFrame(self.ticker.history(period=self.period, interval=self.interval))
-            mpf.plot(frame, type=f'{self.type}', volume=True, mav=(3, 6), figsize=(15, 5),
-                     title=f'Line chart of {self.ticker.info["shortName"]} ')
+            mpf.plot(frame, type=f'{self.type}', volume=True, mav= self.mav, figsize=(15, 5),\
+            title=f'Line chart of {self.ticker.info["shortName"]}')
 
             plt.xlabel('Day')
             plt.ylabel("Price")
@@ -37,16 +37,21 @@ class Chart(Stock):
 
 
 
-def run_info (ticker):
+def run_chart (ticker):
     type = str(input ("What type of chart do you want to see? (candle, line, renko, pnf)?"))
     period = str(input ("What period? (d, mo, y, ytd, max)"))
     interval = str(input ("What interval? (1h, 1d, 5d, 1wk, 1mo)"))
     mav = int(input ("Which moving average do you want to see? Write number."))
 
     user_stock = Chart (ticker, type, period, interval, mav)
-    user_stock.show_main_information()
-    user_stock.analyst_informations()
     user_stock.show_chart()
+
+def run_info (ticker):
+    user_stock = Stock(ticker)
+    user_stock.show_main_information()
+    print ("Latest recommendations:")
+    user_stock.analyst_informations()
+
 
 
 

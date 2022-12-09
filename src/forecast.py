@@ -5,7 +5,7 @@ from src.classes import Stock
 
 class Forecast (Stock):
         """Feature help to get average dynamics of growth of different positions in Financial Statements.
-        It also can predict values of """
+        It also can predict values of finance positions in 2023 based on counted dynamics."""
         def __init__(self, ticker):
                 super().__init__(ticker)
 
@@ -56,11 +56,9 @@ class Forecast (Stock):
                         plt.show()
 
 
-
-
-
-abac = Forecast('googl')
-abac.count_dynamics()
-abac.predictions()
+def run_forecast(ticker):
+        user_stock = Forecast (ticker)
+        user_stock.count_dynamics()
+        user_stock.predictions()
 
 
