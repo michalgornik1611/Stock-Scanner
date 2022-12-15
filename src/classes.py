@@ -51,5 +51,3 @@ def run_info (ticker):
     user_stock.show_main_information()
     print ("Latest recommendations:")
     user_stock.analyst_informations()
-
-
