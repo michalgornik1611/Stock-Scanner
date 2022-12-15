@@ -53,5 +53,3 @@ def run_info (ticker):
     user_stock.analyst_informations()
 
 
-
-
