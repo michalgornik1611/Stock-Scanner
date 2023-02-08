@@ -298,3 +298,24 @@ def run (ticker: str):
         report_builder.build(ticker, data)
 
 
+
+
+def test_get_ticker_sector():
+    assert SectorDataBuilder()._get_ticker_sector('Non existing ticker') is None
+    assert isinstance(SectorDataBuilder()._get_ticker_sector('AAPL'), str)
+
+
+def test_build_series_by_sector():
+    assert SectorDataBuilder()._build_series_by_sector('Non existing sector') is None
+    assert isinstance(SectorDataBuilder()._build_series_by_sector('Information Technology'), pd.Series)
+
+
+def test_build():
+    assert SectorDataBuilder().build('Non existing ticker') is None
+    assert isinstance(SectorDataBuilder().build('AAPL'), pd.Series)
+
+
+if __name__ == '__main__':
+    test_get_ticker_sector()
+    test_build_series_by_sector()
+    test_build()
