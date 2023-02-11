@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import yfinance as yf
 import pandas as pd
-from src.classes import Stock
+from classes import Stock
 
 class Forecast (Stock):
         """Feature help to get average dynamics of growth of different positions in Financial Statements.

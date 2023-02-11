@@ -28,8 +28,8 @@ class Chart(Stock):
 
     def show_chart(self):
             frame = pd.DataFrame(self.ticker.history(period=self.period, interval=self.interval))
-            mpf.plot(frame, type=f'{self.type}', volume=True, mav= self.mav, figsize=(15, 5),\
-            title=f'Line chart of {self.ticker.info["shortName"]}')
+            mpf.plot(frame, type=f'{self.type}', volume=True, mav= self.mav, figsize=(15, 5)),
+
 
             plt.xlabel('Day')
             plt.ylabel("Price")
@@ -51,3 +51,5 @@ def run_info (ticker):
     user_stock.show_main_information()
     print ("Latest recommendations:")
     user_stock.analyst_informations()
+
+
