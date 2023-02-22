@@ -1,4 +1,4 @@
-import yfinance as yf
+
 import urllib
 import urllib.parse
 import json
@@ -67,5 +67,5 @@ def run_forecast(ticker):
         user_stock = Forecast (ticker)
         user_stock.count_dynamics()
         user_stock.predictions()
-run_forecast('tsla')
+
 

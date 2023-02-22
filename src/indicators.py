@@ -21,7 +21,7 @@ class SectorDataBuilder:
             print(f"Sector of {ticker.upper()} is {sector}")
             return sector
         else:
-            print('Ticker is not in our list.')
+            pass
 
     @staticmethod
     def _build_series_by_sector(sector: str) -> Optional[pd.Series]:
@@ -49,7 +49,7 @@ class SectorDataBuilder:
             return groups
 
         else:
-            print('Ticker is not in our list.')
+            pass
 
 
 

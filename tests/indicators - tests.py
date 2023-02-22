@@ -197,7 +197,7 @@ def test_arrangement_of_group():
     assert isinstance(SectorDataBuilder().arrangement_of_group('AAPL'), pd.Series)
 
 def test():
-    assert AsyncDataDownloader.__init__('Non existing list') is None
+    assert AsyncDataDownloader.download_site('Non existing list') is None
     assert isinstance(AsyncDataDownloader.__init__(), list)
 
 

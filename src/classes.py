@@ -55,8 +55,7 @@ def run_chart (ticker):
     user_stock = Chart (ticker, type, period, interval, mav)
     user_stock.show_chart()
 
-def run_info ():
-    ticker = input ("Write ticker of stock, that you want to scan:")
+def run_info (ticker):
     user_stock = Stock (ticker)
     user_stock.show_main_information()
     user_stock.show_recommendations()
