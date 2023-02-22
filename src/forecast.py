@@ -1,64 +1,71 @@
-import matplotlib.pyplot as plt
 import yfinance as yf
-import pandas as pd
-from classes import Stock
+import urllib
+import urllib.parse
+import json
+import matplotlib.pyplot as plt
 
-class Forecast (Stock):
+class Forecast:
         """Feature help to get average dynamics of growth of different positions in Financial Statements.
         It also can predict values of finance positions in 2023 based on counted dynamics."""
         def __init__(self, ticker):
-                super().__init__(ticker)
+                self.ticker = ticker
 
 
         def count_dynamics(self):
 
-                data = self.ticker.get_financials()
-                financial_results = ["Total Revenue", "Cost Of Revenue", "Gross Profit", "Ebit", "Net Income"]
-                list_of_averages = []
-                for result in financial_results:
+                response = urllib.request.urlopen(
+                        f'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{self.ticker}?modules=incomeStatementHistory')
+                content = response.read()
+                data = json.loads(content.decode('utf8'))
+                financial_results = ["totalRevenue", "costOfRevenue", "grossProfit", "ebit", "netIncome"]
+                years = [0,1,2,3]
 
-                        values = []
-                        for _ in range (3):
-                                percent = (int(data.loc[result].iloc[_]) / int(data.loc[result].iloc[_ + 1]) - 1)
-                                values.append(percent)
-                                dynamic = ((percent * 100))
-                                print (f"Growth dynamic of {result} in {str(data.columns[_])[:4]} was {dynamic:.2f}%")
-                        average = (sum(values)/len(values))
-                        list_of_averages.append(average)
-
-                return list_of_averages
-
-
+                for _ in financial_results:
+                        results = []
+                        for year in years:
+                                results.append(data['quoteSummary']['result'][0]['incomeStatementHistory']['incomeStatementHistory'][year][_]['raw'])
+                        x = int (results[0])
+                        y = int (results[1])
+                        z = ((x / y) - 1) * 100
+                        print(f'Last year dynamics of {_} equals {round (z,2)}%')
 
         def predictions(self):
-                data = self.ticker.get_financials()
-                financial_results = ["Total Revenue", "Cost Of Revenue", "Gross Profit", "Ebit", "Net Income"]
-                method = Forecast.count_dynamics(self)
-                combined = list(zip(financial_results, method))
+                response = urllib.request.urlopen(
+                        f'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{self.ticker}?modules=incomeStatementHistory')
+                content = response.read()
+                data = json.loads(content.decode('utf8'))
+                financial_results = ["totalRevenue", "costOfRevenue", "grossProfit", "ebit", "netIncome"]
+                years = [0, 1, 2, 3]
 
-                for result, dynamic in combined:
-                        var1 = data.loc[result]
-                        var2 = var1.values.tolist()[::-1]
-                        var3 = var2[-1] * (1 + dynamic)
-                        var2.append(round(var3,1))
-                        years = []
-                        values = []
-                        for _ in enumerate(var2, start = 2019):
-                                years.append(_[0])
-                                values.append(_[1])
+                for _ in financial_results:
+                        results = []
+                        for year in years:
+                                results.append(data['quoteSummary']['result'][0]['incomeStatementHistory']['incomeStatementHistory'][year][_]['raw'])
+                                global results_reverse
+                                results_reverse = results[::-1]
+                        yearss = []
+                        valuess =[]
 
-                        x_axis = years
-                        y_axis = values
+
+                        for i in enumerate(results_reverse, start = 2019):
+                                yearss.append (i[0])
+                                valuess.append(i[1])
+                        dyn = valuess[-1] * (1 + ((valuess[-1]/valuess[-2] - 1)))
+                        yearss.append (2023)
+                        valuess.append (dyn)
+
+
+                        x_axis = yearss
+                        y_axis = valuess
                         plt.bar(x_axis, y_axis)
-                        plt.title(f"{result}")
+                        plt.title(f"{_} of {self.ticker.upper()}")
                         plt.xlabel ("Year")
                         plt.ylabel ("USD")
                         plt.show()
-
 
 def run_forecast(ticker):
         user_stock = Forecast (ticker)
         user_stock.count_dynamics()
         user_stock.predictions()
-
+run_forecast('tsla')
 

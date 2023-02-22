@@ -1,25 +1,34 @@
-import yfinance as yf
 import matplotlib.pyplot as plt
 import mplfinance as mpf
 import pandas as pd
+import json
+from urllib.request import urlopen
+import yfinance as yf
 
 
 class Stock:
     "Transform user's input into object of yfinance and enable to get the main info about company"
     def __init__(self, ticker):
-        self.ticker = yf.Ticker(ticker)
+        self.ticker = ticker
 
     def show_main_information (self):
-        print (self.ticker.info['longBusinessSummary'])
+        self.site = (f'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{self.ticker}?modules=assetProfile')
+        json_url = urlopen(self.site)
+        self.data = json.loads(json_url.read())
+        print (self.data['quoteSummary']['result'][0]['assetProfile']['longBusinessSummary'])
 
-    def analyst_informations (self):
-        print (self.ticker.get_recommendations()[:5])
+    def show_recommendations (self):
+        self.site = (f'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{self.ticker}?modules=recommendationTrend')
+        json_url = urlopen(self.site)
+        self.data = json.loads(json_url.read())
+        reco = self.data['quoteSummary']['result'][0]['recommendationTrend']['trend'][0]
+        print(f'Recommendations of {self.ticker.upper()} published last month: STRONG BUY - {reco["strongBuy"]}, BUY - {reco["buy"]}, HOLD - {reco["hold"]}, SELL - {reco["sell"]}, STRONG SELL - {reco["strongSell"]} ')
 
-class Chart(Stock):
-    "Enable to show a daily stock chart quotes"
 
+class Chart:
+    "Enable to show a daily stock chart quotes, feature uses yfinance API"
     def __init__(self, ticker, type, period, interval, mav):
-        super().__init__(ticker)
+        self.ticker = yf.Ticker(ticker)
         self.type = type
         self.period = period
         self.interval = interval
@@ -46,10 +55,8 @@ def run_chart (ticker):
     user_stock = Chart (ticker, type, period, interval, mav)
     user_stock.show_chart()
 
-def run_info (ticker):
-    user_stock = Stock(ticker)
+def run_info ():
+    ticker = input ("Write ticker of stock, that you want to scan:")
+    user_stock = Stock (ticker)
     user_stock.show_main_information()
-    print ("Latest recommendations:")
-    user_stock.analyst_informations()
-
-
+    user_stock.show_recommendations()

@@ -40,13 +40,6 @@ class SectorDataBuilder:
             return None
 
 
-class DefiningSector:
-
-    """Get info about sector of  stock"""
-
-    def __init__(self, ticker):
-        self.ticker = ticker
-
     @staticmethod
     def arrangement_of_group(ticker):
         if ticker.upper() in companies_SP.values:
@@ -61,7 +54,7 @@ class DefiningSector:
 
 
 class AsyncDataDownloader:
-    """Compare stock to companies from sector based on specialized indicators."""
+    """Asynchronous data download."""
 
     def __init__(self, ticker_names: list[str]):
         self.ticker_names = ticker_names
@@ -93,6 +86,8 @@ class AsyncDataDownloader:
 
 
 class ReportBuilder:
+    """Compare stock to companies from sector based on specialized indicators."""
+
     def __init__(self):
         profitability = ["ebitdaMargins",
                          "profitMargins",
