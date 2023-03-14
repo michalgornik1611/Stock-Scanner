@@ -1,6 +1,7 @@
 
 import urllib
 import urllib.parse
+from urllib.request import urlopen
 import json
 import matplotlib.pyplot as plt
 
@@ -67,5 +68,3 @@ def run_forecast(ticker):
         user_stock = Forecast (ticker)
         user_stock.count_dynamics()
         user_stock.predictions()
-
-

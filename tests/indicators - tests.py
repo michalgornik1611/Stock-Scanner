@@ -196,10 +196,35 @@ def test_arrangement_of_group():
     assert SectorDataBuilder().arrangement_of_group('Non existing ticker') is None
     assert isinstance(SectorDataBuilder().arrangement_of_group('AAPL'), pd.Series)
 
-def test():
+"""Class AsyncDataDownloader"""
+
+def test_download_site():
+    assert AsyncDataDownloader.download_site('Non existing list') is None
+    assert isinstance(AsyncDataDownloader().download_site(url), list)
+def test_download_all_sites():
+    assert AsyncDataDownloader.download_site('Non existing list') is None
+    assert isinstance(AsyncDataDownloader().download_all_sites(sites), list)
+
+def test_generate_urls():
+    assert AsyncDataDownloader.download_site('Non existing list') is None
+    assert isinstance(AsyncDataDownloader()._generate_urls(), list)
+
+def test_download():
+    assert AsyncDataDownloader.download_site('Non existing list') is None
+    assert isinstance(AsyncDataDownloader().download(), list)
+
+"""Class ReportBuilder"""
+def test_post_process_result():
     assert AsyncDataDownloader.download_site('Non existing list') is None
     assert isinstance(AsyncDataDownloader.__init__(), list)
 
+def test_processing_stock():
+    assert AsyncDataDownloader.download_site('Non existing list') is None
+    assert isinstance(AsyncDataDownloader.__init__(), list)
+
+def test_build():
+    assert AsyncDataDownloader.download_site('Non existing list') is None
+    assert isinstance(AsyncDataDownloader.__init__(), list)
 
 
 if __name__ == '__main__':
